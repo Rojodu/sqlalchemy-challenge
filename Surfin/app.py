@@ -13,6 +13,9 @@ Base = automap_base()
 
 Base.prepare(autoload_with = engine)
 
+Measurement = Base.classes.measurement
+Station = Base.classes.station
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -29,22 +32,36 @@ def homepage():
 
 @app.route('/api/v1.0/precipitation')
 def precipitation():
-    return()
+    session = Session(engine)
+    dict = {}
+    last_prcp = session.query(Measurement.date, Measurement.prcp).filter(Measurement.station == 'USC00519281').filter(Measurement.date >= '2016-08-23').all()
+    for tuple in last_prcp:
+        dict[tuple[0]] = dict[tuple[1]]
+    session.close()
+    return jsonify(dict)
 
 @app.route('/api/v1.0/stations')
 def stations():
+    session = Session(engine)
+    session.close()
     return()
 
 @app.route('/api/v1.0/tobs')
 def tobs():
+    session = Session(engine)
+    session.close()
     return()
 
 @app.route('/api/v1.0/<start>')
 def startdate():
+    session = Session(engine)
+    session.close()
     return()
 
 @app.route('/api/v1.0/<start>/<end>')
 def startenddate():
+    session = Session(engine)
+    session.close()
     return()
 
 if __name__ == '__main__':
